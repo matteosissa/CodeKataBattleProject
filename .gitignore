@@ -10,3 +10,11 @@ UML_diagrams/
 CourseAssignment/
 UIMockup/
 *.ini
+
+# Maven build outputs
+target/
+*.jar
+*.war
+
+# Delivery folder with compiled artifacts
+delivery-ckb/

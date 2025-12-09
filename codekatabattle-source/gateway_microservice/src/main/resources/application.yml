@@ -1,0 +1,26 @@
+server:
+  port: 8087
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 2a9b4bae124a78a27fad
+            clientSecret: 590165785fa75de10d5fd14f3d3b69069a40e079
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ckb_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  thymeleaf:
+    enabled: true
+    prefix:  classpath:/templates/
+    suffix: .html
+    cache: false  # Disable caching for development, you can set it to true in production
+#logging:
+ # level:
+  #  org.thymeleaf: DEBUG
+
+
