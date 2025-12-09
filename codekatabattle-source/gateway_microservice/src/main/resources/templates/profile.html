@@ -143,9 +143,103 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
             color: white !important;
         }
+
+        /* Toast notification styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 300px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease forwards;
+            border-left: 4px solid #667eea;
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+        }
+
+        .toast.warning {
+            border-left-color: #ffc107;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .toast-message {
+            flex-grow: 1;
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover {
+            color: #333;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast.hiding {
+            animation: slideOut 0.3s ease forwards;
+        }
     </style>
 </head>
 <body>
+<div class="toast-container" id="toastContainer"></div>
 <h2>Profile</h2>
 <div class="authenticated" style="display:none">
     <span id="username" style="display:none"></span>
@@ -171,6 +265,42 @@
 </div>
 </div>
 
+<script type="text/javascript">
+// Toast notification function
+function showToast(message, type = 'info') {
+    var container = document.getElementById('toastContainer');
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    
+    var icons = {
+        info: 'ℹ️',
+        warning: '⚠️',
+        error: '❌'
+    };
+    
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.info}</span>
+        <span class="toast-message">${message}</span>
+        <button class="toast-close" onclick="closeToast(this)">×</button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(function() {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 4000);
+}
+
+function closeToast(button) {
+    var toast = button.parentElement;
+    toast.classList.add('hiding');
+    setTimeout(function() {
+        toast.remove();
+    }, 300);
+}
+</script>
+
 <script type="text/javascript"> <!-- For educator -->
 $(document).ready(function () {
     $("#displayTournamentsLink").on("click", function (event) {
@@ -188,6 +318,7 @@ $(document).ready(function () {
             .fail(function (xhr, textStatus, error) {
                 console.error("Error:", error);
                 console.log("Status Code:", xhr.status);
+                showToast('Failed to load tournaments', 'error');
             });
     });
 });
@@ -206,7 +337,7 @@ function displayTournaments(tournaments) {
             tournamentListDiv.append("<br>");
         }
     } else {
-        tournamentListDiv.text("No tournaments available.");
+        showToast('No tournaments available', 'info');
     }
 }
 </script>
@@ -226,6 +357,7 @@ $(document).ready(function () {
             .fail(function (xhr, textStatus, error) {
                 console.error("Error:", error);
                 console.log("Status Code:", xhr.status);
+                showToast('Failed to load tournaments', 'error');
             });
     });
 });
@@ -245,7 +377,7 @@ function displayTournamentsAbs(tournaments) {
             tournamentListDiv.append("<br>");
         }
     } else {
-        tournamentListDiv.text("No tournaments available.");
+        showToast('No tournaments available', 'info');
     }
 }
 </script>
@@ -267,6 +399,7 @@ $(document).ready(function () {
             .fail(function (xhr, textStatus, error) {
                 console.error("Error:", error);
                 console.log("Status Code:", xhr.status);
+                showToast('Failed to load subscribed tournaments', 'error');
             });
     });
 });
@@ -276,8 +409,10 @@ function displayTournamentsSubscribed(tournaments) {
     tournamentListDiv.empty();
 
     if (tournaments && tournaments.length > 0) {
+        var hasValidTournaments = false;
         for (var i = 0; i < tournaments.length; i++) {
             if (tournaments[i]!=null) {
+                hasValidTournaments = true;
                 var tournamentLink = $("<a>", {
                     //href: "/tournament-detail?name=" + encodeURIComponent(tournaments[i]),
                     href: "/subscribed-tournament-view?name=" + encodeURIComponent(tournaments[i]),
@@ -287,12 +422,12 @@ function displayTournamentsSubscribed(tournaments) {
                 tournamentListDiv.append(tournamentLink);
                 tournamentListDiv.append("<br>");
             }
-            else {
-                tournamentListDiv.text("No tournaments available.");
-            }
+        }
+        if (!hasValidTournaments) {
+            showToast('You are not subscribed to any tournaments', 'info');
         }
     } else {
-        tournamentListDiv.text("No tournaments available.");
+        showToast('You are not subscribed to any tournaments', 'info');
     }
 }
 </script>
