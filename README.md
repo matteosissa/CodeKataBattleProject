@@ -9,7 +9,7 @@
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.java.net/) [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen.svg)](https://spring.io/projects/spring-boot) [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-<img src="Home.png" alt="Code Kata Battle Platform" width="600"/>
+<img src="imgs/Home.png" alt="Code Kata Battle Platform" width="600"/>
 
 
 </div>
@@ -26,31 +26,17 @@ Code Kata Battle is a comprehensive microservices-based platform designed to fac
 
 This project follows a **microservices architecture** with clear separation of concerns:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Gateway Service                      │
-│         (OAuth2, Routing, Frontend Serving)             │
-└────────────┬────────────────────────────────────────────┘
-             │
-    ┌────────┴────────┬────────────┬──────────────┬────────────┐
-    │                 │            │              │            │
-┌───▼────┐    ┌──────▼─────┐  ┌──▼─────┐  ┌─────▼──────┐ ┌──▼──────────┐
-│  User  │    │ Tournament │  │ Battle │  │   GitHub   │ │    Score    │
-│Service │    │  Service   │  │Service │  │Integration │ │ Computation │
-└───┬────┘    └──────┬─────┘  └──┬─────┘  └─────┬──────┘ └──────┬──────┘
-    │                │           │              │               │
-    └────────┬───────┴───────────┴──────────────┴───────────────┘
-             │
-    ┌────────▼────────────────────────────────────┐
-    │         Notification Service                │
-    │      (Kafka Consumer, Event Handler)        │
-    └─────────────────────────────────────────────┘
+<div align="center">
 
-    ┌─────────────────────────────────────────────┐
-    │           Infrastructure Layer              │
-    │  PostgreSQL | Kafka | Zookeeper | Docker   │
-    └─────────────────────────────────────────────┘
-```
+
+<img src="imgs/Microservice_diagram.png" alt="Code Kata Battle Platform" width="600"/>
+
+
+</div>
+
+
+
+
 
 ### Microservices
 
@@ -79,9 +65,6 @@ This project follows a **microservices architecture** with clear separation of c
 ### Frontend
 - 🎭 **Thymeleaf Templates** - Dynamic HTML rendering
 - 🎨 **Bootstrap 5** - Responsive UI framework
-- ⚡ **jQuery** - DOM manipulation and AJAX
-- 🔤 **Inter Font** - Modern typography
-- 🎨 **Modern UI** - Purple gradient design with glassmorphism effects
 
 ### Infrastructure
 - 🐳 **Docker Compose** - Container orchestration
@@ -131,6 +114,7 @@ docker-compose up -d
 ```
 
 This starts:
+
 - 🐘 PostgreSQL on port 5432
 - 📨 Kafka on port 9092
 - 🦁 Zookeeper on port 2181
@@ -142,6 +126,7 @@ This starts:
 ```
 
 This script:
+
 - ✅ Compiles all 7 microservices
 - 📦 Packages them into executable JARs
 - 📁 Creates the `delivery-ckb` folder with run scripts
@@ -172,19 +157,14 @@ http://localhost:8087
 ### For Educators 👨‍🏫
 
 1. **Login** with your GitHub account
-2. **Update your role** (first time only):
-   ```sql
-   docker exec -i $(docker ps -qf "name=postgres") psql -U postgres -d ckb_db \
-     -c "UPDATE user_model SET role = 1 WHERE username = 'your-github-username';"
-   ```
-3. **Create a Tournament**
+2. **Create a Tournament**
    - Click "Create a new tournament"
    - Set registration and submission deadlines
    - Add tournament description
-4. **Create Battles** within the tournament
+3. **Create Battles** within the tournament
    - Link GitHub repository with test cases
    - Configure team size and deadlines
-5. **Monitor Progress**
+4. **Monitor Progress**
    - View student submissions
    - Track scores and rankings
    - End tournaments when complete
@@ -207,44 +187,6 @@ http://localhost:8087
    - Click the "Notifications" button
    - Get updates on scores and rankings
 
----
-
-## 🛠️ Configuration
-
-### Database Configuration
-
-Default credentials (defined in `docker-compose.yml`):
-
-```yaml
-POSTGRES_DB: ckb_db
-POSTGRES_USER: postgres
-POSTGRES_PASSWORD: postgres
-```
-
-### Microservice Configuration
-
-Each microservice can be configured via `application.yml`:
-
-```yaml
-server:
-  port: 8087  # Gateway port
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ckb_db
-    username: postgres
-    password: postgres
-```
-
-### Kafka Configuration
-
-```yaml
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: notification-group
-```
 
 ---
 
@@ -292,146 +234,6 @@ cd delivery-ckb
 ./bin/stopCKB.sh
 ```
 
----
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Services Won't Start
-
-```bash
-# Check if ports are already in use
-lsof -i :8087
-
-# Kill existing processes
-pkill -f "java -jar.*microservice"
-```
-
-#### Database Connection Errors
-
-```bash
-# Verify PostgreSQL is running
-docker ps | grep postgres
-
-# Check database exists
-docker exec -it ckb-postgres psql -U postgres -l
-
-# Recreate database
-docker-compose down -v
-docker-compose up -d
-```
-
-#### GitHub OAuth Not Working
-
-1. Verify OAuth app configuration in GitHub
-2. Check client ID and secret in `application.yml`
-3. Ensure callback URL is: `http://localhost:8087/login/oauth2/code/github`
-4. Make sure your OAuth app is set to "Public" or your account has access
-
-#### Kafka Connection Issues
-
-```bash
-# Restart Kafka and Zookeeper
-docker-compose restart kafka zookeeper
-
-# Check Kafka logs
-docker logs ckb-kafka
-
-# Verify Kafka is healthy
-docker exec -it ckb-kafka kafka-broker-api-versions --bootstrap-server localhost:9092
-```
-
-#### "Display tournaments" Shows Nothing
-
-This usually means you're logged in as a student but trying to view educator tournaments, or vice versa:
-
-```bash
-# Check your role (0 = student, 1 = educator)
-docker exec -i ckb-postgres psql -U postgres -d ckb_db \
-  -c "SELECT * FROM user_model WHERE username = 'your-github-username';"
-
-# Change to educator
-docker exec -i ckb-postgres psql -U postgres -d ckb_db \
-  -c "UPDATE user_model SET role = 1 WHERE username = 'your-github-username';"
-```
-
----
-
-## 📊 Database Schema
-
-### Key Tables
-
-- **user_model** - User accounts and roles (educator/student)
-- **tournament_model** - Tournament metadata and deadlines
-- **battle_model** - Battle configurations and GitHub repo links
-- **tournament_battle_student_team_score** - Team scores and rankings
-- **tournament_student_score** - Overall tournament scores
-
-### Adding Test Data
-
-```bash
-docker exec -i ckb-postgres psql -U postgres -d ckb_db << 'EOF'
-INSERT INTO tournament_model (creator, end_date, ended, name, subscription_deadline) 
-VALUES 
-('your-github-username', '2025-12-31', false, 'Test Tournament', '2025-12-20'),
-('your-github-username', '2026-01-15', false, 'Spring Challenge', '2025-12-25');
-EOF
-```
-
----
-
-## 🎨 UI Features
-
-The platform features a modern, professional UI with:
-
-- 💜 **Purple Gradient Background** - Eye-catching design inspired by modern coding platforms
-- 🎯 **Glassmorphism Effects** - Translucent cards with backdrop blur
-- 🔔 **Toast Notifications** - Elegant slide-in notifications for user feedback
-- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
-- ⚡ **Smooth Animations** - Hover effects and transitions throughout
-- 🎨 **Inter Font** - Clean, modern typography
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
 ## 📄 License
 
 This project was developed as part of a Software Engineering course project at Politecnico di Milano.
-
----
-
-## 👥 Team
-
-Developed with ❤️ by the Code Kata Battle team for Software Engineering 2 course.
-
----
-
-## 🙏 Acknowledgments
-
-- 🍃 Spring Boot community for excellent documentation
-- 🐙 GitHub for OAuth integration and API
-- 📨 Apache Kafka for reliable event streaming
-- 🐘 PostgreSQL for robust data persistence
-- 🌐 The open-source community for amazing tools and libraries
-
----
-
-<div align="center">
-  
-  **Made with** ☕ **and** 💜
-  
-  [Report Bug](https://github.com/matteosissa/CodeKataBattleProject/issues) · [Request Feature](https://github.com/matteosissa/CodeKataBattleProject/issues)
-  
-</div>
