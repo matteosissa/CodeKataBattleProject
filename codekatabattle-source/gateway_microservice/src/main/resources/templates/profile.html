@@ -43,35 +43,40 @@
         }
 
         .btn {
-            padding: 12px 28px;
+            display: inline-block;
+            padding: 14px 32px;
             border-radius: 12px;
-            font-weight: 500;
+            font-weight: 600;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 15px;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
         }
 
         .btn-primary {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn-primary:hover {
-            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            color: white !important;
         }
 
         .btn-success {
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
         }
 
         .btn-success:hover {
-            background: rgba(76, 175, 80, 1);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+            color: white !important;
         }
 
         h2 {
@@ -91,6 +96,7 @@
             backdrop-filter: blur(10px);
             border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
 
         .role-1 h3, .role-0 h3 {
@@ -98,12 +104,19 @@
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 30px;
+            text-align: center;
         }
 
-        a.btn {
-            display: inline-block;
-            margin: 10px;
-            text-decoration: none;
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .button-group .btn {
+            width: 100%;
         }
 
         #tournamentList {
@@ -113,9 +126,10 @@
         .tournament-link {
             display: block;
             padding: 16px 24px;
-            margin: 12px 0;
+            margin: 12px auto;
+            max-width: 600px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: white !important;
             text-decoration: none;
             border-radius: 12px;
             font-size: 16px;
@@ -127,7 +141,7 @@
         .tournament-link:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-            color: white;
+            color: white !important;
         }
     </style>
 </head>
@@ -139,23 +153,22 @@
 </div>
 <div class="container">
 <div class="role-1" style="display:none">
-    <h3>Welcome, Educator</h3><br>
-    <div>
+    <h3>Welcome, Educator</h3>
+    <div class="button-group">
         <a href="/create-tournament" class="btn btn-primary">Create a new tournament</a>
         <a href="#" id="displayTournamentsLink" class="btn btn-primary">Display your tournaments</a>
     </div>
+    <div id="tournamentList"></div>
 </div>
 <div class="role-0" style="display:none">
-    <button onclick="window.location.href='/notification'" class="btn btn-success divNotif">Notification</button>
-
-    <h3>Welcome, Student</h3> <br>
-    <div>
+    <h3>Welcome, Student</h3>
+    <div class="button-group">
+        <button onclick="window.location.href='/notification'" class="btn btn-success">Notifications</button>
         <a href="#" id="displayTournamentsLinkStudent" class="btn btn-primary">Display all tournaments</a>
         <a href="#" id="displaySubscribed" class="btn btn-primary">Display tournaments you are subscribed in</a>
     </div>
-</div>
-    <br>
     <div id="tournamentList"></div>
+</div>
 </div>
 
 <script type="text/javascript"> <!-- For educator -->
