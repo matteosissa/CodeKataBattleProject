@@ -18,3 +18,7 @@ target/
 
 # Delivery folder with compiled artifacts
 delivery-ckb/
+
+# Local configuration with secrets
+application-local.yml
+**/application-local.yml

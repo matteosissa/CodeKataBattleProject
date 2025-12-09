@@ -6,8 +6,8 @@ spring:
       client:
         registration:
           github:
-            clientId: 2a9b4bae124a78a27fad
-            clientSecret: 590165785fa75de10d5fd14f3d3b69069a40e079
+            clientId: Ov23liY0zxdkOXq52N5n
+            clientSecret: e7edefb7b662fb7d06ef58c8041dd2217e0017a6
 
   datasource:
     url: jdbc:postgresql://localhost:5432/ckb_db

@@ -6,6 +6,34 @@ The application requires:
 - **Java 17** or higher
 - **PostgreSQL** database
 - **Apache Kafka** message broker
+- **GitHub OAuth App** (for authentication)
+
+## Initial Setup
+
+### 1. Create GitHub OAuth App
+
+Before running the application, you need to create a GitHub OAuth App:
+
+1. Go to https://github.com/settings/developers
+2. Click "OAuth Apps" → "New OAuth App"
+3. Fill in:
+   - **Application name**: `CodeKataBattle`
+   - **Homepage URL**: `http://localhost:8087`
+   - **Authorization callback URL**: `http://localhost:8087/login/oauth2/code/github`
+4. Copy your **Client ID** and **Client Secret**
+
+See [GITHUB_OAUTH_SETUP.md](GITHUB_OAUTH_SETUP.md) for detailed instructions.
+
+### 2. Configure OAuth Credentials
+
+**Option A: Environment Variables (Recommended)**
+```bash
+export GITHUB_CLIENT_ID="your-client-id"
+export GITHUB_CLIENT_SECRET="your-client-secret"
+```
+
+**Option B: Update application.yml**
+Edit `codekatabattle-source/gateway_microservice/src/main/resources/application.yml` and replace the placeholder values.
 
 ## Quick Start (Recommended)
 
