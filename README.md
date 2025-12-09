@@ -22,6 +22,29 @@ Code Kata Battle is a comprehensive microservices-based platform designed to fac
 
 ---
 
+## 🌊 Waterfall Development
+
+This project was developed using a **waterfall software development approach** by a team of three students as part of the Software Engineering 2 course at Politecnico di Milano.
+
+The development process followed traditional waterfall phases, with comprehensive documentation produced at each stage. All project artifacts are available in the `docs/` folder:
+
+### 📋 Documentation
+
+| Document | Description |
+|----------|-------------|
+| **Original Requirements** ([`docs/initial-requirements/`](docs/initial-requirements/)) | Stakeholder requirements and initial project assignments provided by the course instructors |
+| **Requirements Analysis Document** ([PDF](docs/produced-analysis/Requirements_analysis_document.pdf)) | Detailed analysis of functional and non-functional requirements, use cases, UML diagrams, scenarios, and domain modeling |
+| **Design Document** ([PDF](docs/produced-analysis/Design_document.pdf)) | System architecture design, microservices breakdown, component diagrams, database schema, API specifications, and design patterns applied |
+| **Implementation & Testing Document** ([PDF](docs/produced-analysis/Implementation_and_testing_document.pdf)) | Implementation details, code structure, testing strategies, unit tests, integration tests |
+| **Acceptance Testing Document** ([PDF](docs/produced-analysis/Acceptance_testing_document.pdf)) | Acceptance testing results on a similar project from another team. |
+| **Final Presentation** ([PPTX](docs/produced-analysis/Final_presentation.pptx)) | Project overview, architecture walkthrough, demo scenarios, and key achievements |
+
+### 🔧 Formal Verification
+
+The project also includes an **Alloy formal model** ([`docs/alloy_model.als`](docs/alloy_model.als)) used to verify critical system properties and validate the correctness of the tournament and battle management logic.
+
+---
+
 ## 🏗️ Architecture
 
 This project follows a **microservices architecture** with clear separation of concerns:
